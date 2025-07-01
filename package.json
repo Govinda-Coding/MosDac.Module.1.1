@@ -1,0 +1,20 @@
+{
+  "name": "mosdac-ai-chatbot",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+  },
+  "dependencies": {
+    "axios": "^1.6.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.0",
+    "sass": "^1.69.0",
+    "typescript": "^5.2.0",
+    "vite": "^4.5.0"
+  }
+}

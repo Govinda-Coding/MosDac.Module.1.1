@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="MOSDAC Virtual Assistant - AI-powered satellite data help bot for ISRO-SAC" />
+    <meta name="keywords" content="MOSDAC, ISRO, Satellite Data, AI Assistant, Government" />
+    <title>MOSDAC Virtual Assistant | ISRO-SAC</title>
+    <link rel="icon" type="image/svg+xml" href="/satellite-icon.svg" />
+    
+    <!-- Government Compliance Meta Tags -->
+    <meta name="author" content="ISRO Space Applications Centre" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#000000" />
+    
+    <!-- Accessibility -->
+    <meta name="color-scheme" content="dark" />
+    
+    <!-- Preload critical fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <div class="app-container">
+            <!-- Header -->
+            <header class="app-header" role="banner">
+                <div class="header-content">
+                    <div class="logo-section">
+                        <img src="/isro-logo.svg" alt="ISRO Logo" class="isro-logo" />
+                        <div class="title-section">
+                            <h1 class="main-title">MOSDAC Virtual Assistant</h1>
+                            <p class="subtitle">Meteorological & Oceanographic Satellite Data Archival Centre</p>
+                        </div>
+                    </div>
+                    <button class="info-button" type="button" aria-label="About MOSDAC" id="infoButton">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                        </svg>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Main Chat Container -->
+            <main class="chat-container" role="main">
+                <div class="chat-window" id="chatWindow" role="log" aria-live="polite" aria-label="Chat conversation">
+                    <!-- Welcome Message -->
+                    <div class="message bot-message welcome-message">
+                        <div class="message-avatar">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="satellite-icon">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                        </div>
+                        <div class="message-content">
+                            <div class="message-text">
+                                Welcome to MOSDAC Virtual Assistant! I can help you find information about satellite data, products, and services. What would you like to know?
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions" id="quickActions">
+                    <button class="quick-action-btn" data-query="What is MOSDAC?">
+                        What is MOSDAC?
+                    </button>
+                    <button class="quick-action-btn" data-query="How to download satellite data?">
+                        Download Data
+                    </button>
+                    <button class="quick-action-btn" data-query="Available satellite products">
+                        Satellite Products
+                    </button>
+                    <button class="quick-action-btn" data-query="INSAT weather data">
+                        Weather Data
+                    </button>
+                </div>
+
+                <!-- Input Section -->
+                <div class="input-section">
+                    <form class="input-form" id="chatForm" role="form">
+                        <div class="input-container">
+                            <input 
+                                type="text" 
+                                id="userInput" 
+                                class="user-input" 
+                                placeholder="Ask me about satellite data, products, or services..."
+                                autocomplete="off"
+                                maxlength="500"
+                                aria-label="Type your question about MOSDAC services"
+                                required
+                            />
+                            <button 
+                                type="submit" 
+                                class="send-button" 
+                                id="sendButton"
+                                aria-label="Send message"
+                                disabled
+                            >
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="input-footer">
+                            <small>Powered by AI • Government of India • ISRO-SAC</small>
+                        </div>
+                    </form>
+                </div>
+            </main>
+
+            <!-- Footer -->
+            <footer class="app-footer" role="contentinfo">
+                <div class="footer-content">
+                    <div class="footer-left">
+                        <span>© 2024 Indian Space Research Organisation</span>
+                        <span>Space Applications Centre</span>
+                    </div>
+                    <div class="footer-right">
+                        <a href="https://www.mosdac.gov.in" target="_blank" rel="noopener" class="footer-link">
+                            Visit MOSDAC Portal
+                        </a>
+                    </div>
+                </div>
+            </footer>
+        </div>
+
+        <!-- Info Modal -->
+        <div class="modal-overlay" id="infoModal" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="modalTitle">About MOSDAC</h2>
+                    <button class="modal-close" type="button" aria-label="Close dialog" id="closeModal">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>The Meteorological and Oceanographic Satellite Data Archival Centre (MOSDAC) is a facility at Space Applications Centre (SAC), ISRO for archival, processing and dissemination of Oceanographic, Atmospheric and Land satellite data.</p>
+                    <p>MOSDAC provides access to satellite data from various Indian and international satellites including INSAT, SCATSAT, Oceansat, and many others.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Indicator -->
+        <div class="loading-indicator" id="loadingIndicator" aria-hidden="true">
+            <div class="loading-spinner"></div>
+            <span>Processing your query...</span>
+        </div>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
