@@ -1,8 +1,9 @@
 // MOSDAC Cosmic Command Console - Main Stylesheet
 // Import cosmic design system and components
 
-@import 'variables';
-@import 'components';
+@use 'sass:color';
+@use 'variables' as *;
+@use 'components';
 
 // === GLOBAL RESET & BASE STYLES ===
 * {
@@ -349,11 +350,11 @@ body {
 @media (prefers-color-scheme: light) {
   // Override for users who prefer light mode but still maintain cosmic theme
   body {
-    background: lighten($color-void, 5%);
+    background: color.adjust($color-void, $lightness: 5%);
   }
   
   .console-container {
-    background: lighten($color-void, 5%);
+    background: color.adjust($color-void, $lightness: 5%);
   }
 }
 

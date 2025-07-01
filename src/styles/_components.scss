@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 // MOSDAC Cosmic Command Console - Component Styles
 // Professional space station interface components
 
@@ -325,6 +327,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    gap: $space-4;
     
     .console-status {
       display: flex;
@@ -351,6 +355,44 @@
         color: $color-text-secondary;
         text-transform: uppercase;
         letter-spacing: 0.5px;
+      }
+    }
+    
+    .analysis-toggle {
+      .control-btn {
+        @include button-reset;
+        @include flex-center;
+        gap: $space-2;
+        padding: $space-3 $space-4;
+        background: rgba($color-accent-orange, 0.1);
+        border: 1px solid rgba($color-accent-orange, 0.3);
+        border-radius: $radius-md;
+        color: $color-accent-orange;
+        font-family: $font-mono;
+        font-size: $font-size-xs;
+        font-weight: $font-weight-medium;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        transition: all $transition-normal;
+        
+        .control-icon {
+          width: 16px;
+          height: 16px;
+        }
+        
+        &:hover {
+          background: rgba($color-accent-orange, 0.2);
+          border-color: $color-accent-orange;
+          @include cosmic-glow($color-accent-orange, 0.4);
+          transform: translateY(-1px);
+        }
+        
+        &.active {
+          background: $color-accent-orange;
+          color: $color-void;
+        }
+        
+        @include cosmic-focus;
       }
     }
     
@@ -611,7 +653,7 @@
           }
           
           &:not(:disabled):hover {
-            background: lighten($color-accent-blue, 10%);
+            background: color.adjust($color-accent-blue, $lightness: 10%);
             @include cosmic-glow($color-accent-blue, 0.6);
             transform: scale(1.05);
           }
@@ -868,7 +910,7 @@
       transition: all $transition-normal;
       
       &:hover {
-        background: lighten($color-accent-blue, 10%);
+        background: color.adjust($color-accent-blue, $lightness: 10%);
       }
     }
   }
@@ -929,6 +971,16 @@
   .console-screen {
     min-height: 400px;
     max-height: 50vh;
+    
+    .screen-header {
+      flex-direction: column;
+      align-items: stretch;
+      text-align: center;
+      
+      .analysis-toggle {
+        order: -1;
+      }
+    }
   }
   
   .command-header .header-content {
