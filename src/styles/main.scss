@@ -1,37 +1,49 @@
-// Import variables and components
+// MOSDAC Cosmic Command Console - Main Stylesheet
+// Import cosmic design system and components
+
 @import 'variables';
 @import 'components';
 
-// Global Reset and Base Styles
+// === GLOBAL RESET & BASE STYLES ===
 * {
+  box-sizing: border-box;
+}
+
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
 html {
   font-size: 16px;
   scroll-behavior: smooth;
+  height: 100%;
 }
 
 body {
   margin: 0;
   padding: 0;
-  font-family: $font-family-primary;
+  font-family: $font-primary;
   font-weight: $font-weight-normal;
   line-height: $line-height-normal;
   color: $color-text-primary;
-  background: $color-background;
+  background: $color-void;
   overflow-x: hidden;
+  height: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
 }
 
-// Accessibility improvements
+// === ACCESSIBILITY ENHANCEMENTS ===
+// Focus management for keyboard navigation
 *:focus {
-  outline: 2px solid $color-accent;
+  outline: 2px solid $color-accent-blue;
   outline-offset: 2px;
 }
 
-// Hide focus outline for mouse users
+// Hide focus outline for mouse users only
 .js-focus-visible *:focus:not(.focus-visible) {
   outline: none;
 }
@@ -49,43 +61,388 @@ body {
   border: 0;
 }
 
-// High contrast mode support
+// Skip link for accessibility
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: $color-accent-blue;
+  color: $color-void;
+  padding: 8px;
+  text-decoration: none;
+  border-radius: $radius-md;
+  z-index: $z-notifications;
+  
+  &:focus {
+    top: 6px;
+  }
+}
+
+// === HIGH CONTRAST MODE SUPPORT ===
 @media (prefers-contrast: high) {
-  .message.bot-message .message-content {
+  .glass-panel {
+    border-width: 2px;
+    border-color: $color-text-primary;
+  }
+  
+  .message-bubble {
     border-width: 2px;
   }
   
-  .input-container {
+  .nav-chip,
+  .control-btn,
+  .quick-link {
     border-width: 2px;
   }
 }
 
-// Reduced motion support
+// === REDUCED MOTION SUPPORT ===
 @media (prefers-reduced-motion: reduce) {
-  * {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .starfield-canvas {
+    display: none;
+  }
+  
+  .status-indicator,
+  .sat-indicator {
+    animation: none !important;
+  }
+  
+  .orbit-loader .orbit {
+    animation: none !important;
+    border: 2px solid $color-accent-blue;
   }
 }
 
-// Print styles
+// === PRINT STYLES ===
 @media print {
-  .app-header,
-  .input-section,
-  .app-footer,
-  .quick-actions,
-  .modal-overlay,
-  .loading-indicator {
+  .starfield-canvas,
+  .command-header,
+  .satellite-panel,
+  .timeline-drawer,
+  .quick-nav,
+  .command-terminal,
+  .quick-links-strip,
+  .command-footer,
+  .command-processor,
+  .idle-helper,
+  .gov-emblem {
     display: none !important;
   }
   
-  .chat-window {
+  .console-container {
+    background: white;
+    color: black;
+  }
+  
+  .console-screen {
     box-shadow: none;
-    border: 1px solid #000;
+    border: 2px solid black;
+    max-height: none;
   }
   
   .message {
     break-inside: avoid;
+    page-break-inside: avoid;
   }
+  
+  .message-bubble {
+    background: white !important;
+    border: 1px solid black !important;
+    box-shadow: none !important;
+  }
+  
+  .glass-panel {
+    background: white !important;
+    border: 1px solid black !important;
+    backdrop-filter: none !important;
+  }
+}
+
+// === CUSTOM SELECTION STYLES ===
+::selection {
+  background: rgba($color-accent-blue, 0.3);
+  color: $color-text-primary;
+}
+
+::-moz-selection {
+  background: rgba($color-accent-blue, 0.3);
+  color: $color-text-primary;
+}
+
+// === SCROLLBAR STYLING FOR WEBKIT ===
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba($color-glass-border, 0.1);
+  border-radius: $radius-sm;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $color-glass-border;
+  border-radius: $radius-sm;
+  
+  &:hover {
+    background: rgba($color-accent-blue, 0.5);
+  }
+  
+  &:active {
+    background: rgba($color-accent-blue, 0.7);
+  }
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+// === LOADING STATES ===
+.loading {
+  opacity: 0.6;
+  pointer-events: none;
+  cursor: wait;
+}
+
+.loading * {
+  cursor: wait;
+}
+
+// === ERROR STATES ===
+.error {
+  color: $color-accent-error !important;
+  border-color: $color-accent-error !important;
+}
+
+.error-glow {
+  @include cosmic-glow($color-accent-error, 0.6);
+}
+
+// === SUCCESS STATES ===
+.success {
+  color: $color-accent-success !important;
+  border-color: $color-accent-success !important;
+}
+
+.success-glow {
+  @include cosmic-glow($color-accent-success, 0.6);
+}
+
+// === WARNING STATES ===
+.warning {
+  color: $color-accent-warning !important;
+  border-color: $color-accent-warning !important;
+}
+
+.warning-glow {
+  @include cosmic-glow($color-accent-warning, 0.6);
+}
+
+// === UTILITY CLASSES ===
+.hidden {
+  display: none !important;
+}
+
+.invisible {
+  visibility: hidden !important;
+}
+
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.lowercase {
+  text-transform: lowercase;
+}
+
+.capitalize {
+  text-transform: capitalize;
+}
+
+.no-select {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.relative {
+  position: relative;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.fixed {
+  position: fixed;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-center {
+  @include flex-center;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.h-full {
+  height: 100%;
+}
+
+// === DARK MODE PREFERENCE SUPPORT ===
+@media (prefers-color-scheme: light) {
+  // Override for users who prefer light mode but still maintain cosmic theme
+  body {
+    background: lighten($color-void, 5%);
+  }
+  
+  .console-container {
+    background: lighten($color-void, 5%);
+  }
+}
+
+// === FORCED COLORS MODE (WINDOWS HIGH CONTRAST) ===
+@media (forced-colors: active) {
+  .glass-panel {
+    background: Canvas;
+    border: 1px solid ButtonText;
+  }
+  
+  .control-btn,
+  .nav-chip,
+  .quick-link {
+    background: ButtonFace;
+    border: 1px solid ButtonText;
+    color: ButtonText;
+    
+    &:hover {
+      background: Highlight;
+      color: HighlightText;
+    }
+  }
+  
+  .message-bubble {
+    background: Canvas;
+    border: 1px solid ButtonText;
+    color: CanvasText;
+  }
+  
+  .terminal-input {
+    background: Field;
+    color: FieldText;
+    border: 1px solid ButtonText;
+  }
+}
+
+// === CUSTOM PROPERTIES FOR DYNAMIC THEMING ===
+:root {
+  --cosmic-void: #{$color-void};
+  --cosmic-blue: #{$color-accent-blue};
+  --cosmic-orange: #{$color-accent-orange};
+  --cosmic-text: #{$color-text-primary};
+  --cosmic-glass: #{$color-glass-bg};
+  --cosmic-border: #{$color-glass-border};
+  
+  // Animation speeds that can be controlled
+  --animation-speed-fast: #{$transition-fast};
+  --animation-speed-normal: #{$transition-normal};
+  --animation-speed-slow: #{$transition-slow};
+}
+
+// === EXPERIMENTAL FEATURES ===
+// Modern CSS features with fallbacks
+
+// Container queries support (when available)
+@supports (container-type: inline-size) {
+  .console-container {
+    container-type: inline-size;
+  }
+  
+  @container (max-width: 768px) {
+    .command-header .header-content {
+      flex-direction: column;
+    }
+  }
+}
+
+// Backdrop filter fallback
+@supports not (backdrop-filter: blur(20px)) {
+  .glass-panel {
+    background: rgba($color-console, 0.95);
+  }
+}
+
+// Subgrid support (when available)
+@supports (grid-template-rows: subgrid) {
+  .satellite-grid {
+    display: grid;
+    grid-template-rows: subgrid;
+  }
+}
+
+// === FONT LOADING OPTIMIZATION ===
+@font-face {
+  font-family: 'Space Grotesk';
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-display: swap;
 }

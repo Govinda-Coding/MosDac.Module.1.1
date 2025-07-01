@@ -1,518 +1,1011 @@
-// App Container
-.app-container {
-  min-height: 100vh;
-  background: $color-background;
-  display: flex;
-  flex-direction: column;
-  position: relative;
+// MOSDAC Cosmic Command Console - Component Styles
+// Professional space station interface components
+
+// === STARFIELD BACKGROUND ===
+.starfield-canvas {
+  @include absolute-cover;
+  z-index: $z-starfield;
+  pointer-events: none;
+  opacity: 0.6;
 }
 
-// Header Styles
-.app-header {
-  position: sticky;
-  top: 0;
-  background: rgba($color-surface, 0.95);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid $color-surface-light;
-  z-index: $z-header;
-  padding: $spacing-md;
+// === MAIN CONSOLE CONTAINER ===
+.console-container {
+  min-height: 100vh;
+  background: $color-void;
+  position: relative;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: $space-5;
+}
 
+// === GOVERNMENT EMBLEM ===
+.gov-emblem {
+  position: absolute;
+  top: $space-5;
+  left: $space-5;
+  z-index: $z-header;
+  
+  .emblem-img {
+    width: 40px;
+    height: 40px;
+    filter: grayscale(1) brightness(0.8);
+    opacity: 0.7;
+  }
+}
+
+// === COMMAND HEADER ===
+.command-header {
+  width: 100%;
+  max-width: $console-max-width;
+  margin-bottom: $space-8;
+  
   .header-content {
-    max-width: $container-max-width;
-    margin: 0 auto;
+    @include glass-panel;
+    padding: $space-6 $space-8;
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
-
-  .logo-section {
-    display: flex;
-    align-items: center;
-    gap: $spacing-md;
-  }
-
-  .isro-logo {
-    width: 48px;
-    height: 48px;
-    filter: brightness(0) invert(1);
-  }
-
-  .title-section {
-    .main-title {
-      font-size: $font-size-xl;
-      font-weight: $font-weight-semibold;
-      color: $color-text-primary;
-      margin: 0;
-      line-height: $line-height-tight;
+    
+    .mission-logo {
+      display: flex;
+      align-items: center;
+      gap: $space-6;
+      
+      .isro-logo {
+        width: 48px;
+        height: 48px;
+        filter: brightness(0) invert(1);
+      }
+      
+      .mission-title {
+        .main-title {
+          font-family: $font-primary;
+          font-size: $font-size-2xl;
+          font-weight: $font-weight-medium;
+          color: $color-text-primary;
+          margin: 0;
+          line-height: $line-height-tight;
+          @include text-glow;
+        }
+        
+        .mission-subtitle {
+          font-family: $font-mono;
+          font-size: $font-size-sm;
+          color: $color-text-secondary;
+          margin: 0;
+          margin-top: $space-2;
+        }
+      }
     }
-
-    .subtitle {
-      font-size: $font-size-sm;
-      color: $color-text-secondary;
-      margin: 0;
-      line-height: $line-height-normal;
-    }
-  }
-
-  .info-button {
-    @include button-reset;
-    @include flex-center;
-    width: 40px;
-    height: 40px;
-    border-radius: $border-radius-md;
-    background: $color-surface-light;
-    color: $color-text-secondary;
-    transition: all $transition-normal;
-
-    &:hover {
-      background: $color-accent;
-      color: $color-text-primary;
-      transform: scale(1.05);
-    }
-
-    &:focus {
-      @include focus-ring;
-    }
-  }
-}
-
-// Chat Container
-.chat-container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  max-width: $container-max-width;
-  margin: 0 auto;
-  padding: $spacing-lg;
-  width: 100%;
-}
-
-// Chat Window
-.chat-window {
-  flex: 1;
-  overflow-y: auto;
-  padding: $spacing-md 0;
-  margin-bottom: $spacing-lg;
-  scroll-behavior: smooth;
-
-  &::-webkit-scrollbar {
-    width: 6px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: $color-surface;
-    border-radius: $border-radius-sm;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: $color-surface-light;
-    border-radius: $border-radius-sm;
-
-    &:hover {
-      background: $color-text-muted;
-    }
-  }
-}
-
-// Message Styles
-.message {
-  display: flex;
-  margin-bottom: $spacing-lg;
-  animation: messageSlideIn 0.3s ease-out;
-
-  &.user-message {
-    justify-content: flex-end;
-
-    .message-content {
-      background: $color-accent;
-      color: $color-text-primary;
-      border-radius: $border-radius-lg $border-radius-sm $border-radius-lg $border-radius-lg;
-      max-width: 80%;
-    }
-  }
-
-  &.bot-message {
-    justify-content: flex-start;
-
-    .message-content {
-      background: $color-surface;
-      border: 1px solid $color-surface-light;
-      border-radius: $border-radius-sm $border-radius-lg $border-radius-lg $border-radius-lg;
-      box-shadow: $shadow-glow;
-      max-width: 85%;
-    }
-
-    &.welcome-message .message-content {
-      background: linear-gradient(135deg, $color-surface 0%, rgba($color-accent, 0.1) 100%);
-    }
-  }
-
-  .message-avatar {
-    @include flex-center;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: $color-accent;
-    margin-right: $spacing-sm;
-    flex-shrink: 0;
-
-    .satellite-icon {
-      width: 18px;
-      height: 18px;
-      color: $color-text-primary;
-    }
-  }
-
-  .message-content {
-    padding: $spacing-md $spacing-lg;
-  }
-
-  .message-text {
-    font-size: $font-size-base;
-    line-height: $line-height-normal;
-    word-wrap: break-word;
-  }
-
-  .message-sources {
-    margin-top: $spacing-sm;
-    padding-top: $spacing-sm;
-    border-top: 1px solid rgba($color-text-secondary, 0.2);
-
-    .source-link {
-      color: $color-accent;
-      text-decoration: none;
-      font-size: $font-size-sm;
-
-      &:hover {
-        text-decoration: underline;
+    
+    .control-panel {
+      display: flex;
+      gap: $space-3;
+      
+      .control-btn {
+        @include button-reset;
+        @include flex-center;
+        flex-direction: column;
+        gap: $space-2;
+        padding: $space-4 $space-5;
+        background: rgba($color-accent-blue, 0.1);
+        border: 1px solid rgba($color-accent-blue, 0.3);
+        border-radius: $radius-lg;
+        color: $color-accent-blue;
+        font-family: $font-mono;
+        font-size: $font-size-xs;
+        font-weight: $font-weight-medium;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        transition: all $transition-normal;
+        
+        .control-icon {
+          width: 18px;
+          height: 18px;
+        }
+        
+        &:hover {
+          background: rgba($color-accent-blue, 0.2);
+          border-color: $color-accent-blue;
+          @include cosmic-glow($color-accent-blue, 0.4);
+          transform: translateY(-2px);
+        }
+        
+        &.active {
+          background: $color-accent-blue;
+          color: $color-void;
+        }
+        
+        @include cosmic-focus;
       }
     }
   }
 }
 
-@keyframes messageSlideIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+// === GLASS PANELS (REUSABLE) ===
+.glass-panel {
+  @include glass-panel;
 }
 
-// Quick Actions
-.quick-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: $spacing-sm;
-  margin-bottom: $spacing-lg;
-
-  .quick-action-btn {
-    @include button-reset;
-    padding: $spacing-sm $spacing-md;
-    background: $color-surface;
-    border: 1px solid $color-surface-light;
-    border-radius: $border-radius-lg;
-    color: $color-text-secondary;
-    font-size: $font-size-sm;
-    transition: all $transition-normal;
-
-    &:hover {
-      background: $color-accent;
-      color: $color-text-primary;
-      border-color: $color-accent;
-      transform: translateY(-1px);
-    }
-
-    &:focus {
-      @include focus-ring;
-    }
+// === SATELLITE STATUS PANEL ===
+.satellite-panel {
+  position: fixed;
+  top: 50%;
+  right: $space-5;
+  transform: translateY(-50%) translateX(100%);
+  width: $panel-width;
+  max-height: 60vh;
+  z-index: $z-panels;
+  transition: transform $transition-normal;
+  
+  &.active {
+    transform: translateY(-50%) translateX(0);
   }
-}
-
-// Input Section
-.input-section {
-  position: sticky;
-  bottom: 0;
-  background: rgba($color-background, 0.95);
-  backdrop-filter: blur(10px);
-  padding: $spacing-md 0;
-  z-index: $z-input;
-}
-
-.input-form {
-  .input-container {
-    display: flex;
-    gap: $spacing-sm;
-    align-items: flex-end;
-    background: $color-surface;
-    border: 1px solid $color-surface-light;
-    border-radius: $border-radius-xl;
-    padding: $spacing-sm;
-    transition: border-color $transition-normal;
-
-    &:focus-within {
-      border-color: $color-accent;
-      box-shadow: 0 0 0 3px $color-accent-glow;
-    }
-  }
-
-  .user-input {
-    flex: 1;
-    background: transparent;
-    border: none;
-    outline: none;
-    color: $color-text-primary;
-    font-size: $font-size-base;
-    line-height: $line-height-normal;
-    padding: $spacing-sm $spacing-md;
-    resize: none;
-    max-height: 120px;
-
-    &::placeholder {
-      color: $color-text-muted;
-    }
-  }
-
-  .send-button {
-    @include button-reset;
-    @include flex-center;
-    width: 40px;
-    height: 40px;
-    border-radius: $border-radius-md;
-    background: $color-accent;
-    color: $color-text-primary;
-    transition: all $transition-normal;
-
-    &:disabled {
-      background: $color-surface-light;
-      color: $color-text-muted;
-      cursor: not-allowed;
-    }
-
-    &:not(:disabled):hover {
-      background: $color-accent-hover;
-      transform: scale(1.05);
-    }
-
-    &:focus {
-      @include focus-ring;
-    }
-  }
-
-  .input-footer {
-    margin-top: $spacing-sm;
-    text-align: center;
-
-    small {
-      color: $color-text-muted;
-      font-size: $font-size-xs;
-    }
-  }
-}
-
-// Footer
-.app-footer {
-  background: $color-surface;
-  border-top: 1px solid $color-surface-light;
-  padding: $spacing-md;
-
-  .footer-content {
-    max-width: $container-max-width;
-    margin: 0 auto;
+  
+  .panel-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: $font-size-sm;
-    color: $color-text-secondary;
+    padding: $space-6;
+    border-bottom: 1px solid $color-glass-border;
+    
+    h3 {
+      font-family: $font-mono;
+      font-size: $font-size-lg;
+      color: $color-text-primary;
+      margin: 0;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .panel-close {
+      @include button-reset;
+      color: $color-text-secondary;
+      font-size: $font-size-2xl;
+      line-height: 1;
+      
+      &:hover {
+        color: $color-accent-error;
+      }
+    }
   }
-
-  .footer-left {
+  
+  .satellite-grid {
+    padding: $space-6;
     display: flex;
     flex-direction: column;
-    gap: $spacing-xs;
+    gap: $space-4;
   }
-
-  .footer-link {
-    color: $color-accent;
-    text-decoration: none;
-    transition: color $transition-normal;
-
-    &:hover {
-      color: $color-accent-hover;
-      text-decoration: underline;
+  
+  .satellite-item {
+    display: flex;
+    align-items: center;
+    gap: $space-4;
+    padding: $space-4;
+    background: rgba($color-console, 0.8);
+    border-radius: $radius-md;
+    border: 1px solid transparent;
+    transition: all $transition-normal;
+    
+    &.active {
+      border-color: rgba($color-accent-success, 0.5);
+      
+      .sat-indicator {
+        background: $color-accent-success;
+        @include cosmic-glow($color-accent-success, 0.6);
+        animation: pulseGlow 2s infinite;
+      }
+    }
+    
+    &.maintenance {
+      border-color: rgba($color-accent-warning, 0.5);
+      
+      .sat-indicator {
+        background: $color-accent-warning;
+      }
+    }
+    
+    .sat-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: $color-text-muted;
+    }
+    
+    .sat-name {
+      font-family: $font-mono;
+      font-weight: $font-weight-medium;
+      color: $color-text-primary;
+      flex: 1;
+    }
+    
+    .sat-status {
+      font-size: $font-size-xs;
+      color: $color-text-secondary;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
   }
 }
 
-// Modal Styles
-.modal-overlay {
+// === MISSION TIMELINE DRAWER ===
+.timeline-drawer {
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba($color-background, 0.8);
-  backdrop-filter: blur(5px);
-  @include flex-center;
-  z-index: $z-modal;
-  opacity: 0;
-  visibility: hidden;
-  transition: all $transition-normal;
-
+  width: $panel-width;
+  height: 100vh;
+  transform: translateX(-100%);
+  z-index: $z-panels;
+  transition: transform $transition-normal;
+  overflow-y: auto;
+  
   &.active {
-    opacity: 1;
-    visibility: visible;
+    transform: translateX(0);
   }
-
-  .modal-content {
-    background: $color-surface;
-    border: 1px solid $color-surface-light;
-    border-radius: $border-radius-xl;
-    max-width: 500px;
-    width: 90%;
-    max-height: 80vh;
-    overflow-y: auto;
-    transform: scale(0.9);
-    transition: transform $transition-normal;
+  
+  .timeline-content {
+    padding: $space-6;
   }
-
-  &.active .modal-content {
-    transform: scale(1);
-  }
-
-  .modal-header {
+  
+  .timeline-item {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: $spacing-lg;
-    border-bottom: 1px solid $color-surface-light;
-
-    h2 {
-      margin: 0;
-      color: $color-text-primary;
-      font-size: $font-size-xl;
-      font-weight: $font-weight-semibold;
+    gap: $space-5;
+    margin-bottom: $space-8;
+    position: relative;
+    
+    &:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: 8px;
+      top: 32px;
+      bottom: -$space-8;
+      width: 2px;
+      background: linear-gradient(to bottom, $color-accent-blue, transparent);
     }
-  }
-
-  .modal-close {
-    @include button-reset;
-    @include flex-center;
-    width: 32px;
-    height: 32px;
-    border-radius: $border-radius-md;
-    color: $color-text-secondary;
-    transition: all $transition-normal;
-
-    &:hover {
-      background: $color-surface-light;
-      color: $color-text-primary;
+    
+    .timeline-marker {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: $color-accent-blue;
+      @include cosmic-glow($color-accent-blue, 0.6);
+      flex-shrink: 0;
+      margin-top: $space-2;
     }
-
-    &:focus {
-      @include focus-ring;
-    }
-  }
-
-  .modal-body {
-    padding: $spacing-lg;
-
-    p {
-      margin: 0 0 $spacing-md 0;
-      color: $color-text-secondary;
-      line-height: $line-height-relaxed;
-
-      &:last-child {
-        margin-bottom: 0;
+    
+    .timeline-content-item {
+      h4 {
+        font-family: $font-mono;
+        font-size: $font-size-base;
+        color: $color-text-primary;
+        margin: 0 0 $space-2 0;
+      }
+      
+      p {
+        font-size: $font-size-sm;
+        color: $color-text-secondary;
+        margin: 0 0 $space-2 0;
+        line-height: $line-height-relaxed;
+      }
+      
+      time {
+        font-size: $font-size-xs;
+        color: $color-accent-orange;
+        font-weight: $font-weight-medium;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
       }
     }
   }
 }
 
-// Loading Indicator
-.loading-indicator {
+// === MAIN COMMUNICATION CONSOLE ===
+.communication-console {
+  width: 100%;
+  max-width: $console-max-width;
+  display: flex;
+  flex-direction: column;
+  gap: $space-6;
+}
+
+// === CONSOLE SCREEN ===
+.console-screen {
+  min-height: 500px;
+  max-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  
+  .screen-header {
+    padding: $space-5 $space-8;
+    border-bottom: 1px solid $color-glass-border;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    .console-status {
+      display: flex;
+      align-items: center;
+      gap: $space-3;
+      
+      .status-indicator {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: $color-accent-success;
+        @include cosmic-glow($color-accent-success, 0.8);
+        animation: pulseGlow 2s infinite;
+        
+        &.inactive {
+          background: $color-accent-error;
+          @include cosmic-glow($color-accent-error, 0.8);
+        }
+      }
+      
+      span {
+        font-family: $font-mono;
+        font-size: $font-size-sm;
+        color: $color-text-secondary;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+    }
+    
+    .conversation-breadcrumb {
+      font-family: $font-mono;
+      font-size: $font-size-xs;
+      color: $color-text-muted;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+  }
+  
+  .conversation-area {
+    flex: 1;
+    overflow-y: auto;
+    padding: $space-6 $space-8;
+    scroll-behavior: smooth;
+    
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: rgba($color-glass-border, 0.1);
+      border-radius: $radius-sm;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background: $color-glass-border;
+      border-radius: $radius-sm;
+      
+      &:hover {
+        background: rgba($color-accent-blue, 0.5);
+      }
+    }
+  }
+}
+
+// === MESSAGE STYLES ===
+.message {
+  display: flex;
+  margin-bottom: $space-8;
+  animation: fadeInUp 0.5s ease-out;
+  
+  &.user-message {
+    justify-content: flex-end;
+    
+    .message-bubble {
+      background: rgba($color-accent-blue, 0.15);
+      border: 1px solid rgba($color-accent-blue, 0.3);
+      border-radius: $radius-xl $radius-md $radius-xl $radius-xl;
+      max-width: 75%;
+      margin-left: auto;
+      @include cosmic-glow($color-accent-blue, 0.2);
+    }
+  }
+  
+  &.bot-message {
+    justify-content: flex-start;
+    
+    .message-avatar {
+      @include flex-center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, $color-accent-blue, $color-accent-orange);
+      @include cosmic-glow($color-accent-blue, 0.4);
+      margin-right: $space-4;
+      flex-shrink: 0;
+      
+      .satellite-icon {
+        width: 20px;
+        height: 20px;
+        color: $color-void;
+      }
+    }
+    
+    .message-bubble {
+      background: $color-glass-bg;
+      border: 1px solid $color-glass-border;
+      border-left: 3px solid $color-accent-blue;
+      border-radius: $radius-md $radius-xl $radius-xl $radius-xl;
+      max-width: 80%;
+      @include cosmic-glow($color-accent-blue, 0.1);
+    }
+    
+    &.welcome-message .message-bubble {
+      border-left-color: $color-accent-orange;
+      @include cosmic-glow($color-accent-orange, 0.2);
+    }
+  }
+  
+  .message-bubble {
+    padding: $space-5 $space-6;
+    
+    .message-content {
+      font-size: $font-size-base;
+      line-height: $line-height-relaxed;
+      color: $color-text-primary;
+      word-wrap: break-word;
+      
+      p {
+        margin: 0 0 $space-4 0;
+        
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+    
+    .message-sources {
+      margin-top: $space-5;
+      padding-top: $space-4;
+      border-top: 1px solid rgba($color-text-secondary, 0.2);
+      
+      .source-link {
+        color: $color-accent-orange;
+        text-decoration: none;
+        font-size: $font-size-sm;
+        margin-right: $space-4;
+        
+        &:hover {
+          text-decoration: underline;
+          @include text-glow($color-accent-orange);
+        }
+      }
+    }
+  }
+}
+
+// === QUICK NAVIGATION ===
+.quick-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-3;
+  
+  .nav-chip {
+    @include button-reset;
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    padding: $space-4 $space-5;
+    background: rgba($color-console, 0.8);
+    border: 1px solid $color-glass-border;
+    border-radius: $radius-lg;
+    color: $color-text-secondary;
+    font-size: $font-size-sm;
+    transition: all $transition-normal;
+    
+    .chip-icon {
+      font-size: $font-size-base;
+    }
+    
+    &:hover {
+      background: rgba($color-accent-blue, 0.1);
+      border-color: $color-accent-blue;
+      color: $color-accent-blue;
+      transform: translateY(-2px);
+      @include cosmic-glow($color-accent-blue, 0.3);
+    }
+    
+    @include cosmic-focus;
+  }
+}
+
+// === COMMAND TERMINAL ===
+.command-terminal {
+  .terminal-form {
+    .terminal-container {
+      @include terminal-glow;
+      padding: $space-5;
+      
+      .terminal-prompt {
+        margin-bottom: $space-4;
+        
+        .prompt-indicator {
+          font-family: $font-mono;
+          font-size: $font-size-sm;
+          color: $color-accent-success;
+          @include text-glow($color-accent-success);
+        }
+      }
+      
+      .input-section {
+        display: flex;
+        gap: $space-4;
+        align-items: center;
+        
+        .terminal-input {
+          flex: 1;
+          background: transparent;
+          border: none;
+          outline: none;
+          color: $color-text-primary;
+          font-family: $font-mono;
+          font-size: $font-size-base;
+          line-height: $line-height-normal;
+          caret-color: $color-accent-blue;
+          
+          &::placeholder {
+            color: $color-text-muted;
+            font-style: italic;
+          }
+          
+          &:focus {
+            @include text-glow($color-accent-blue);
+          }
+        }
+        
+        .voice-input-btn {
+          @include button-reset;
+          @include flex-center;
+          width: 40px;
+          height: 40px;
+          border-radius: $radius-md;
+          background: rgba($color-accent-orange, 0.1);
+          border: 1px solid rgba($color-accent-orange, 0.3);
+          color: $color-accent-orange;
+          transition: all $transition-normal;
+          
+          .voice-icon {
+            width: 18px;
+            height: 18px;
+          }
+          
+          &:hover {
+            background: rgba($color-accent-orange, 0.2);
+            @include cosmic-glow($color-accent-orange, 0.4);
+          }
+          
+          &.recording {
+            background: $color-accent-error;
+            border-color: $color-accent-error;
+            color: $color-text-primary;
+            animation: pulseGlow 1s infinite;
+          }
+        }
+        
+        .execute-btn {
+          @include button-reset;
+          @include flex-center;
+          width: 48px;
+          height: 48px;
+          border-radius: $radius-md;
+          background: $color-accent-blue;
+          color: $color-void;
+          transition: all $transition-normal;
+          
+          .execute-icon {
+            width: 20px;
+            height: 20px;
+          }
+          
+          &:disabled {
+            background: rgba($color-text-muted, 0.3);
+            color: $color-text-muted;
+            cursor: not-allowed;
+          }
+          
+          &:not(:disabled):hover {
+            background: lighten($color-accent-blue, 10%);
+            @include cosmic-glow($color-accent-blue, 0.6);
+            transform: scale(1.05);
+          }
+          
+          @include cosmic-focus;
+        }
+      }
+    }
+    
+    .terminal-footer {
+      margin-top: $space-4;
+      text-align: center;
+      
+      .hotkey-hints {
+        font-family: $font-mono;
+        font-size: $font-size-xs;
+        color: $color-text-muted;
+        
+        kbd {
+          background: rgba($color-text-muted, 0.2);
+          border: 1px solid rgba($color-text-muted, 0.3);
+          border-radius: $radius-sm;
+          padding: $space-1 $space-2;
+          font-size: inherit;
+          margin: 0 $space-1;
+        }
+      }
+    }
+  }
+}
+
+// === QUICK LINKS STRIP ===
+.quick-links-strip {
+  display: flex;
+  justify-content: center;
+  gap: $space-5;
+  margin: $space-8 0;
+  
+  .quick-link {
+    @include flex-center;
+    gap: $space-3;
+    padding: $space-4 $space-6;
+    background: rgba($color-console, 0.6);
+    border: 1px solid $color-glass-border;
+    border-radius: $radius-lg;
+    color: $color-text-secondary;
+    text-decoration: none;
+    font-size: $font-size-sm;
+    transition: all $transition-normal;
+    
+    .link-icon {
+      font-size: $font-size-base;
+    }
+    
+    &:hover {
+      background: rgba($color-accent-blue, 0.1);
+      border-color: $color-accent-blue;
+      color: $color-accent-blue;
+      transform: translateY(-2px);
+      @include cosmic-glow($color-accent-blue, 0.3);
+    }
+  }
+}
+
+// === COMMAND FOOTER ===
+.command-footer {
+  width: 100%;
+  max-width: $console-max-width;
+  margin-top: auto;
+  
+  .footer-content {
+    @include glass-panel;
+    padding: $space-5 $space-8;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    .mission-info {
+      display: flex;
+      flex-direction: column;
+      gap: $space-2;
+      
+      .powered-by {
+        font-family: $font-mono;
+        font-size: $font-size-sm;
+        color: $color-text-secondary;
+      }
+      
+      .classification {
+        font-family: $font-mono;
+        font-size: $font-size-xs;
+        color: $color-accent-orange;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+    }
+    
+    .footer-controls {
+      display: flex;
+      gap: $space-4;
+      
+      .footer-btn {
+        @include button-reset;
+        padding: $space-3 $space-5;
+        background: rgba($color-text-muted, 0.1);
+        border: 1px solid rgba($color-text-muted, 0.3);
+        border-radius: $radius-md;
+        color: $color-text-muted;
+        font-family: $font-mono;
+        font-size: $font-size-xs;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        transition: all $transition-normal;
+        
+        &:hover {
+          background: rgba($color-accent-blue, 0.1);
+          border-color: $color-accent-blue;
+          color: $color-accent-blue;
+        }
+        
+        @include cosmic-focus;
+      }
+    }
+  }
+}
+
+// === LOADING COMMAND PROCESSOR ===
+.command-processor {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  @include flex-center;
-  flex-direction: column;
-  gap: $spacing-md;
-  background: rgba($color-surface, 0.95);
-  backdrop-filter: blur(10px);
-  border: 1px solid $color-surface-light;
-  border-radius: $border-radius-xl;
-  padding: $spacing-2xl;
-  z-index: $z-loading;
+  z-index: $z-modals;
   opacity: 0;
   visibility: hidden;
   transition: all $transition-normal;
-
+  
   &.active {
     opacity: 1;
     visibility: visible;
   }
-
-  .loading-spinner {
-    width: 32px;
-    height: 32px;
-    border: 3px solid $color-surface-light;
-    border-top-color: $color-accent;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-  }
-
-  span {
-    color: $color-text-secondary;
-    font-size: $font-size-sm;
-  }
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-// Responsive Design
-@media (max-width: $breakpoint-sm) {
-  .app-header {
-    .header-content {
-      padding: 0 $spacing-sm;
-    }
-
-    .title-section {
-      .main-title {
-        font-size: $font-size-lg;
-      }
-
-      .subtitle {
-        font-size: $font-size-xs;
-      }
-    }
-  }
-
-  .chat-container {
-    padding: $spacing-md $spacing-sm;
-  }
-
-  .quick-actions {
-    .quick-action-btn {
-      font-size: $font-size-xs;
-      padding: $spacing-xs $spacing-sm;
-    }
-  }
-
-  .footer-content {
+  
+  .processor-content {
+    @include flex-center;
     flex-direction: column;
-    gap: $spacing-sm;
+    gap: $space-8;
+    padding: $space-12;
+    text-align: center;
+    
+    .processing-animation {
+      .orbit-loader {
+        width: 80px;
+        height: 80px;
+        position: relative;
+        
+        .orbit {
+          position: absolute;
+          border: 2px solid transparent;
+          border-top: 2px solid $color-accent-blue;
+          border-radius: 50%;
+          animation: rotate 2s linear infinite;
+          
+          &:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            animation-duration: 2s;
+          }
+          
+          &:nth-child(2) {
+            width: 60px;
+            height: 60px;
+            top: 10px;
+            left: 10px;
+            border-top-color: $color-accent-orange;
+            animation-duration: 1.5s;
+            animation-direction: reverse;
+          }
+          
+          &:nth-child(3) {
+            width: 40px;
+            height: 40px;
+            top: 20px;
+            left: 20px;
+            border-top-color: $color-accent-success;
+            animation-duration: 1s;
+          }
+        }
+      }
+    }
+    
+    .processor-status {
+      h3 {
+        font-family: $font-mono;
+        font-size: $font-size-xl;
+        color: $color-text-primary;
+        margin: 0 0 $space-4 0;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        @include text-glow;
+      }
+      
+      p {
+        font-size: $font-size-base;
+        color: $color-text-secondary;
+        margin: 0;
+      }
+    }
+  }
+}
+
+// === IDLE HELPER ===
+.idle-helper {
+  position: fixed;
+  bottom: 120px;
+  right: $space-8;
+  z-index: $z-notifications;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px);
+  transition: all $transition-normal;
+  
+  &.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  
+  .helper-content {
+    @include flex-center;
+    flex-direction: column;
+    gap: $space-4;
+    padding: $space-6;
+    text-align: center;
+    min-width: 200px;
+    
+    .helper-icon {
+      font-size: $font-size-2xl;
+    }
+    
+    p {
+      font-size: $font-size-sm;
+      color: $color-text-secondary;
+      margin: 0;
+      line-height: $line-height-relaxed;
+    }
+    
+    .helper-dismiss {
+      @include button-reset;
+      padding: $space-3 $space-5;
+      background: $color-accent-blue;
+      color: $color-void;
+      border-radius: $radius-md;
+      font-size: $font-size-sm;
+      transition: all $transition-normal;
+      
+      &:hover {
+        background: lighten($color-accent-blue, 10%);
+      }
+    }
+  }
+}
+
+// === RESPONSIVE DESIGN ===
+@media (max-width: $breakpoint-lg) {
+  .console-container {
+    padding: $space-3;
+  }
+  
+  .command-header .header-content {
+    padding: $space-5 $space-6;
+    
+    .mission-logo {
+      gap: $space-4;
+      
+      .isro-logo {
+        width: 40px;
+        height: 40px;
+      }
+      
+      .mission-title .main-title {
+        font-size: $font-size-xl;
+      }
+    }
+    
+    .control-panel {
+      gap: $space-2;
+      
+      .control-btn {
+        padding: $space-3 $space-4;
+        
+        span {
+          display: none;
+        }
+      }
+    }
+  }
+  
+  .satellite-panel,
+  .timeline-drawer {
+    width: 90vw;
+    max-width: 350px;
+  }
+  
+  .satellite-panel {
+    right: 50%;
+    transform: translateY(-50%) translateX(50%);
+    
+    &.active {
+      transform: translateY(-50%) translateX(50%);
+    }
+  }
+}
+
+@media (max-width: $breakpoint-md) {
+  .console-screen {
+    min-height: 400px;
+    max-height: 50vh;
+  }
+  
+  .command-header .header-content {
+    flex-direction: column;
+    gap: $space-5;
     text-align: center;
   }
+  
+  .quick-nav .nav-chip {
+    font-size: $font-size-xs;
+    padding: $space-3 $space-4;
+  }
+  
+  .quick-links-strip {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .command-footer .footer-content {
+    flex-direction: column;
+    gap: $space-4;
+    text-align: center;
+  }
+  
+  .idle-helper {
+    bottom: 100px;
+    right: $space-5;
+    left: $space-5;
+    
+    .helper-content {
+      width: 100%;
+    }
+  }
+}
 
-  .modal-overlay .modal-content {
-    width: 95%;
-    margin: $spacing-sm;
+@media (max-width: $breakpoint-sm) {
+  .gov-emblem {
+    top: $space-3;
+    left: $space-3;
+    
+    .emblem-img {
+      width: 32px;
+      height: 32px;
+    }
+  }
+  
+  .console-screen .conversation-area,
+  .command-terminal .terminal-container {
+    padding: $space-5;
+  }
+  
+  .message.bot-message .message-avatar {
+    width: 32px;
+    height: 32px;
+    margin-right: $space-3;
+    
+    .satellite-icon {
+      width: 16px;
+      height: 16px;
+    }
+  }
+  
+  .message-bubble {
+    padding: $space-4 $space-5;
+  }
+  
+  .command-terminal .input-section {
+    gap: $space-3;
+    
+    .voice-input-btn {
+      width: 36px;
+      height: 36px;
+    }
+    
+    .execute-btn {
+      width: 40px;
+      height: 40px;
+    }
   }
 }
